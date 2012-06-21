@@ -9,9 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "NGWeak.h"
 #import "NGAudioPlayerPlaybackState.h"
-
-
-@protocol NGAudioPlayerDelegate;
+#import "NGAudioPlayerDelegate.h"
 
 
 @interface NGAudioPlayer : NSObject
