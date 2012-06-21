@@ -77,9 +77,9 @@ static char currentItemContext;
             _player = [AVQueuePlayer queuePlayerWithItems:nil];
         }
         
-        [self addObserver:self forKeyPath:kNGAudioPlayerKeypathRate options:NSKeyValueObservingOptionNew context:&rateContext];
-        [self addObserver:self forKeyPath:kNGAudioPlayerKeypathStatus options:NSKeyValueObservingOptionNew context:&statusContext];
-        [self addObserver:self forKeyPath:kNGAudioPlayerKeypathCurrentItem options:NSKeyValueObservingOptionNew context:&currentItemContext];
+        [_player addObserver:self forKeyPath:kNGAudioPlayerKeypathRate options:NSKeyValueObservingOptionNew context:&rateContext];
+        [_player addObserver:self forKeyPath:kNGAudioPlayerKeypathStatus options:NSKeyValueObservingOptionNew context:&statusContext];
+        [_player addObserver:self forKeyPath:kNGAudioPlayerKeypathCurrentItem options:NSKeyValueObservingOptionNew context:&currentItemContext];
     }
     
     return self;
@@ -94,9 +94,9 @@ static char currentItemContext;
 }
 
 - (void)dealloc {
-    [self removeObserver:self forKeyPath:kNGAudioPlayerKeypathRate];
-    [self removeObserver:self forKeyPath:kNGAudioPlayerKeypathStatus];
-    [self removeObserver:self forKeyPath:kNGAudioPlayerKeypathCurrentItem];
+    [_player removeObserver:self forKeyPath:kNGAudioPlayerKeypathRate];
+    [_player removeObserver:self forKeyPath:kNGAudioPlayerKeypathStatus];
+    [_player removeObserver:self forKeyPath:kNGAudioPlayerKeypathCurrentItem];
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -289,12 +289,14 @@ static char currentItemContext;
 ////////////////////////////////////////////////////////////////////////
 
 - (NSURL *)URLOfItem:(AVPlayerItem *)item {
-    AVAsset *asset = item.asset;
-    
-    if ([asset isKindOfClass:[AVURLAsset class]]) {
-        AVURLAsset *urlAsset = (AVURLAsset *)asset;
+    if ([item isKindOfClass:[AVPlayerItem class]]) {
+        AVAsset *asset = item.asset;
         
-        return urlAsset.URL;
+        if ([asset isKindOfClass:[AVURLAsset class]]) {
+            AVURLAsset *urlAsset = (AVURLAsset *)asset;
+            
+            return urlAsset.URL;
+        }
     }
     
     return nil;
@@ -326,7 +328,9 @@ static char currentItemContext;
 }
 
 - (void)handleRateChange:(NSDictionary *)change {
-    [self.delegate audioPlayerDidChangePlaybackState:self.playbackState];
+    if (_delegateFlags.didChangePlaybackState) {
+        [self.delegate audioPlayerDidChangePlaybackState:self.playbackState];
+    }
 }
 
 - (void)handleStatusChange:(NSDictionary *)change {
@@ -339,7 +343,7 @@ static char currentItemContext;
     AVPlayerItem *newItem = (AVPlayerItem *)[change valueForKey:NSKeyValueChangeNewKey];
     NSURL *url = [self URLOfItem:newItem];
     
-    if (self.playing && _delegateFlags.didStartPlaybackOfURL) {
+    if (url != nil && self.playing && _delegateFlags.didStartPlaybackOfURL) {
         [self.delegate audioPlayer:self didStartPlaybackOfURL:url];
     }
 }
