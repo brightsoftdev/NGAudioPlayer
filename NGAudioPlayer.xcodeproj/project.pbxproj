@@ -1,0 +1,256 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		9BDA4E2E159311810079ABE5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BDA4E2D159311810079ABE5 /* Foundation.framework */; };
+		9BDA4E33159311810079ABE5 /* NGAudioPlayer.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9BDA4E32159311810079ABE5 /* NGAudioPlayer.h */; };
+		9BDA4E35159311810079ABE5 /* NGAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDA4E34159311810079ABE5 /* NGAudioPlayer.m */; };
+		9BDA4E57159320910079ABE5 /* NGAudioPlayerPlaybackState.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDA4E56159320910079ABE5 /* NGAudioPlayerPlaybackState.m */; };
+		9BDA4E67159323660079ABE5 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BDA4E66159323660079ABE5 /* AVFoundation.framework */; };
+		9BDA4E69159323750079ABE5 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BDA4E68159323750079ABE5 /* CoreMedia.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		9BDA4E28159311810079ABE5 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/${PRODUCT_NAME}";
+			dstSubfolderSpec = 16;
+			files = (
+				9BDA4E33159311810079ABE5 /* NGAudioPlayer.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		9BDA4E2A159311810079ABE5 /* libNGAudioPlayer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libNGAudioPlayer.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		9BDA4E2D159311810079ABE5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		9BDA4E31159311810079ABE5 /* NGAudioPlayer-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NGAudioPlayer-Prefix.pch"; sourceTree = "<group>"; };
+		9BDA4E32159311810079ABE5 /* NGAudioPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NGAudioPlayer.h; sourceTree = "<group>"; };
+		9BDA4E34159311810079ABE5 /* NGAudioPlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NGAudioPlayer.m; sourceTree = "<group>"; };
+		9BDA4E5415931FC20079ABE5 /* NGAudioPlayerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NGAudioPlayerDelegate.h; sourceTree = "<group>"; };
+		9BDA4E55159320910079ABE5 /* NGAudioPlayerPlaybackState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NGAudioPlayerPlaybackState.h; sourceTree = "<group>"; };
+		9BDA4E56159320910079ABE5 /* NGAudioPlayerPlaybackState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NGAudioPlayerPlaybackState.m; sourceTree = "<group>"; };
+		9BDA4E651593210C0079ABE5 /* NGWeak.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NGWeak.h; sourceTree = "<group>"; };
+		9BDA4E66159323660079ABE5 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		9BDA4E68159323750079ABE5 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		9BDA4E27159311810079ABE5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9BDA4E69159323750079ABE5 /* CoreMedia.framework in Frameworks */,
+				9BDA4E67159323660079ABE5 /* AVFoundation.framework in Frameworks */,
+				9BDA4E2E159311810079ABE5 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		9BDA4E1F159311810079ABE5 = {
+			isa = PBXGroup;
+			children = (
+				9BDA4E2F159311810079ABE5 /* NGAudioPlayer */,
+				9BDA4E2C159311810079ABE5 /* Frameworks */,
+				9BDA4E2B159311810079ABE5 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		9BDA4E2B159311810079ABE5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9BDA4E2A159311810079ABE5 /* libNGAudioPlayer.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		9BDA4E2C159311810079ABE5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9BDA4E66159323660079ABE5 /* AVFoundation.framework */,
+				9BDA4E68159323750079ABE5 /* CoreMedia.framework */,
+				9BDA4E2D159311810079ABE5 /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		9BDA4E2F159311810079ABE5 /* NGAudioPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				9BDA4E32159311810079ABE5 /* NGAudioPlayer.h */,
+				9BDA4E34159311810079ABE5 /* NGAudioPlayer.m */,
+				9BDA4E5415931FC20079ABE5 /* NGAudioPlayerDelegate.h */,
+				9BDA4E55159320910079ABE5 /* NGAudioPlayerPlaybackState.h */,
+				9BDA4E56159320910079ABE5 /* NGAudioPlayerPlaybackState.m */,
+				9BDA4E30159311810079ABE5 /* Supporting Files */,
+			);
+			path = NGAudioPlayer;
+			sourceTree = "<group>";
+		};
+		9BDA4E30159311810079ABE5 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				9BDA4E31159311810079ABE5 /* NGAudioPlayer-Prefix.pch */,
+				9BDA4E651593210C0079ABE5 /* NGWeak.h */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		9BDA4E29159311810079ABE5 /* NGAudioPlayer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9BDA4E38159311810079ABE5 /* Build configuration list for PBXNativeTarget "NGAudioPlayer" */;
+			buildPhases = (
+				9BDA4E26159311810079ABE5 /* Sources */,
+				9BDA4E27159311810079ABE5 /* Frameworks */,
+				9BDA4E28159311810079ABE5 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NGAudioPlayer;
+			productName = NGAudioPlayer;
+			productReference = 9BDA4E2A159311810079ABE5 /* libNGAudioPlayer.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		9BDA4E21159311810079ABE5 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0450;
+				ORGANIZATIONNAME = "NOUS Wissensmanagement GmbH";
+			};
+			buildConfigurationList = 9BDA4E24159311810079ABE5 /* Build configuration list for PBXProject "NGAudioPlayer" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 9BDA4E1F159311810079ABE5;
+			productRefGroup = 9BDA4E2B159311810079ABE5 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				9BDA4E29159311810079ABE5 /* NGAudioPlayer */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		9BDA4E26159311810079ABE5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9BDA4E35159311810079ABE5 /* NGAudioPlayer.m in Sources */,
+				9BDA4E57159320910079ABE5 /* NGAudioPlayerPlaybackState.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		9BDA4E36159311810079ABE5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		9BDA4E37159311810079ABE5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		9BDA4E39159311810079ABE5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/NGAudioPlayer.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "NGAudioPlayer/NGAudioPlayer-Prefix.pch";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		9BDA4E3A159311810079ABE5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/NGAudioPlayer.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "NGAudioPlayer/NGAudioPlayer-Prefix.pch";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		9BDA4E24159311810079ABE5 /* Build configuration list for PBXProject "NGAudioPlayer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9BDA4E36159311810079ABE5 /* Debug */,
+				9BDA4E37159311810079ABE5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9BDA4E38159311810079ABE5 /* Build configuration list for PBXNativeTarget "NGAudioPlayer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9BDA4E39159311810079ABE5 /* Debug */,
+				9BDA4E3A159311810079ABE5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 9BDA4E21159311810079ABE5 /* Project object */;
+}
