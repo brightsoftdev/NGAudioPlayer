@@ -229,12 +229,14 @@ static char currentItemContext;
 ////////////////////////////////////////////////////////////////////////
 
 - (BOOL)enqueueURL:(NSURL *)url {
-    AVPlayerItem *item = [AVPlayerItem playerItemWithURL:url];
-    
-    if ([self.player canInsertItem:item afterItem:nil]) {
-        [self.player insertItem:item afterItem:nil];
+    if ([url isKindOfClass:[NSURL class]]) {
+        AVPlayerItem *item = [AVPlayerItem playerItemWithURL:url];
         
-        return YES;
+        if ([self.player canInsertItem:item afterItem:nil]) {
+            [self.player insertItem:item afterItem:nil];
+            
+            return YES;
+        }
     }
     
     return NO;
