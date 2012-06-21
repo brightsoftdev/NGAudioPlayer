@@ -7,13 +7,28 @@
 //
 
 #import "NGAudioPlayer.h"
+#import "NGAudioPlayerDelegate.h"
 
 
 @interface NGAudioPlayer () {
-    NSMutableArray *_urls;
+    // flags for methods implemented in the delegate
+    struct {
+        unsigned int willStartPlaybackOfURL:1;
+        unsigned int didStartPlaybackOfURL:1;
+		unsigned int willPausePlaybackOfURL:1;
+		unsigned int didPausePlaybackOfURL:1;
+        unsigned int didStartPlaying:1;
+        unsigned int didPausePlaying:1;
+        unsigned int didChangePlaybackState:1;
+	} _delegateFlags;
 }
 
 @property (nonatomic, strong) AVQueuePlayer *player;
+@property (nonatomic, readonly) CMTime CMDurationOfCurrentItem;
+
+- (NSURL *)URLOfItem:(AVPlayerItem *)item;
+- (CMTime)CMDurationOfItem:(AVPlayerItem *)item;
+- (NSTimeInterval)durationOfItem:(AVPlayerItem *)item;
 
 @end
 
@@ -73,26 +88,68 @@
 }
 
 - (NSURL *)currentPlayingURL {
-    AVAsset *asset = self.player.currentItem.asset;
-    
-    if ([asset isKindOfClass:[AVURLAsset class]]) {
-        AVURLAsset *urlAsset = (AVURLAsset *)asset;
-        
-        return urlAsset.URL;
-    }
-    
-    return nil;
+    return [self URLOfItem:self.player.currentItem];
+}
+
+- (NSTimeInterval)durationOfCurrentPlayingURL {
+    return [self durationOfItem:self.player.currentItem];
 }
 
 - (NSArray *)enqueuedURLs {
     NSArray *items = self.player.items;
     NSArray *itemsWithURLAssets = [items filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
-        return [evaluatedObject isKindOfClass:[AVURLAsset class]];
+        return [self URLOfItem:evaluatedObject] != nil;
     }]];
     
     NSAssert(items.count == itemsWithURLAssets.count, @"All Assets should be AVURLAssets");
     
     return [itemsWithURLAssets valueForKey:@"URL"];
+}
+
+- (void)setDelegate:(id<NGAudioPlayerDelegate>)delegate {
+    if (delegate != _delegate) {
+        _delegate = delegate;
+        
+        _delegateFlags.willStartPlaybackOfURL = [delegate respondsToSelector:@selector(audioPlayer:willStartPlaybackOfURL:)];
+        _delegateFlags.didStartPlaybackOfURL = [delegate respondsToSelector:@selector(audioPlayer:didStartPlaybackOfURL:)];
+        _delegateFlags.willPausePlaybackOfURL = [delegate respondsToSelector:@selector(audioPlayer:willPausePlaybackOfURL:)];
+        _delegateFlags.didPausePlaybackOfURL = [delegate respondsToSelector:@selector(audioPlayer:didPausePlaybackOfURL:)];
+        _delegateFlags.didStartPlaying = [delegate respondsToSelector:@selector(audioPlayerDidStartPlaying:)];
+        _delegateFlags.didPausePlaying = [delegate respondsToSelector:@selector(audioPlayerDidPausePlaying:)];
+        _delegateFlags.didChangePlaybackState = [delegate respondsToSelector:@selector(audioPlayerDidChangePlaybackState:)];
+    }
+}
+
+////////////////////////////////////////////////////////////////////////
+#pragma mark - NGAudioPlayer Class Methods
+////////////////////////////////////////////////////////////////////////
+
++ (BOOL)setAudioSessionCategory:(NSString *)audioSessionCategory {
+    NSError *error = nil;
+    [[AVAudioSession sharedInstance] setCategory:audioSessionCategory
+                                           error:&error];
+    
+    if (error != nil) {
+        NSLog(@"There was an error setting the AudioCategory to %@", audioSessionCategory);
+        return NO;
+    }
+    
+    return YES;
+}
+
++ (BOOL)initBackgroundAudio {
+    if (![self setAudioSessionCategory:AVAudioSessionCategoryPlayback]) {
+        return NO;
+    }
+    
+    NSError *error = nil;
+	if (![[AVAudioSession sharedInstance] setActive:YES error:&error]) {
+		NSLog(@"Unable to set AudioSession active: %@", error);
+        
+        return NO;
+	}
+    
+    return YES;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -101,8 +158,7 @@
 
 - (void)playURL:(NSURL *)url {
     [self removeAllURLs];
-    
-    // TODO:
+    [self enqueueURL:url];
 }
 
 - (void)play {
@@ -156,13 +212,7 @@
 - (BOOL)removeURL:(NSURL *)url {
     NSArray *items = self.player.items;
     NSArray *itemsWithURL = [items filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
-        if ([evaluatedObject isKindOfClass:[AVURLAsset class]]) {
-            AVURLAsset *urlAsset = (AVURLAsset *)evaluatedObject;
-            
-            return [urlAsset.URL isEqual:url];
-        }
-        
-        return NO;
+        return [[self URLOfItem:evaluatedObject] isEqual:url];
     }]];
     
     // We only remove the first item with this URL (there should be a maximum of one)
@@ -190,5 +240,42 @@
 ////////////////////////////////////////////////////////////////////////
 #pragma mark - Private
 ////////////////////////////////////////////////////////////////////////
+
+- (NSURL *)URLOfItem:(AVPlayerItem *)item {
+    AVAsset *asset = item.asset;
+    
+    if ([asset isKindOfClass:[AVURLAsset class]]) {
+        AVURLAsset *urlAsset = (AVURLAsset *)asset;
+        
+        return urlAsset.URL;
+    }
+    
+    return nil;
+}
+
+- (CMTime)CMDurationOfCurrentItem {
+    return [self CMDurationOfItem:self.player.currentItem];
+}
+
+- (CMTime)CMDurationOfItem:(AVPlayerItem *)item {
+    // Peferred in HTTP Live Streaming
+    if ([item respondsToSelector:@selector(duration)] && // 4.3
+        item.status == AVPlayerItemStatusReadyToPlay) {
+        
+        if (CMTIME_IS_VALID(item.duration)) {
+            return item.duration;
+        }
+    }
+    
+    else if (CMTIME_IS_VALID(item.asset.duration)) {
+        return item.asset.duration;
+    }
+    
+    return kCMTimeInvalid;
+}
+
+- (NSTimeInterval)durationOfItem:(AVPlayerItem *)item {
+    return CMTimeGetSeconds([self CMDurationOfItem:item]);
+}
 
 @end

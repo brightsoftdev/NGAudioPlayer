@@ -21,8 +21,20 @@
 @property (nonatomic, readonly) NGAudioPlayerPlaybackState playbackState;
 
 @property (nonatomic, readonly) NSURL *currentPlayingURL;
+@property (nonatomic, readonly) NSTimeInterval durationOfCurrentPlayingURL;
 @property (nonatomic, readonly) NSArray *enqueuedURLs;
 
+
+/******************************************
+ @name Class Methods
+ ******************************************/
+
++ (BOOL)setAudioSessionCategory:(NSString *)audioSessionCategory;
++ (BOOL)initBackgroundAudio;
+
+/******************************************
+ @name Lifecycle
+ ******************************************/
 
 - (id)initWithURL:(NSURL *)url;
 - (id)initWithURLs:(NSArray *)urls;
