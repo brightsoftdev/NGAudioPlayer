@@ -17,14 +17,8 @@
 
 @optional
 
-- (void)audioPlayer:(NGAudioPlayer *)audioPlayer willStartPlaybackOfURL:(NSURL *)url;
 - (void)audioPlayer:(NGAudioPlayer *)audioPlayer didStartPlaybackOfURL:(NSURL *)url;
 
-- (void)audioPlayer:(NGAudioPlayer *)audioPlayer willPausePlaybackOfURL:(NSURL *)url;
-- (void)audioPlayer:(NGAudioPlayer *)audioPlayer didPausePlaybackOfURL:(NSURL *)url;
-
-- (void)audioPlayerDidStartPlaying:(NGAudioPlayer *)audioPlayer;
-- (void)audioPlayerDidPausePlaying:(NGAudioPlayer *)audioPlayer;
 - (void)audioPlayerDidChangePlaybackState:(NGAudioPlayerPlaybackState)playbackState;
 
 @end

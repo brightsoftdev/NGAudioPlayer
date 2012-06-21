@@ -10,15 +10,20 @@
 #import "NGAudioPlayerDelegate.h"
 
 
+#define kNGAudioPlayerKeypathRate           NSStringFromSelector(@selector(rate))
+#define kNGAudioPlayerKeypathStatus         NSStringFromSelector(@selector(status))
+#define kNGAudioPlayerKeypathCurrentItem    NSStringFromSelector(@selector(currentItem))
+
+
+static char rateContext;
+static char statusContext;
+static char currentItemContext;
+
+
 @interface NGAudioPlayer () {
     // flags for methods implemented in the delegate
     struct {
-        unsigned int willStartPlaybackOfURL:1;
         unsigned int didStartPlaybackOfURL:1;
-		unsigned int willPausePlaybackOfURL:1;
-		unsigned int didPausePlaybackOfURL:1;
-        unsigned int didStartPlaying:1;
-        unsigned int didPausePlaying:1;
         unsigned int didChangePlaybackState:1;
 	} _delegateFlags;
 }
@@ -29,6 +34,10 @@
 - (NSURL *)URLOfItem:(AVPlayerItem *)item;
 - (CMTime)CMDurationOfItem:(AVPlayerItem *)item;
 - (NSTimeInterval)durationOfItem:(AVPlayerItem *)item;
+
+- (void)handleRateChange:(NSDictionary *)change;
+- (void)handleStatusChange:(NSDictionary *)change;
+- (void)handleCurrentItemChange:(NSDictionary *)change;
 
 @end
 
@@ -67,6 +76,10 @@
         } else {
             _player = [AVQueuePlayer queuePlayerWithItems:nil];
         }
+        
+        [self addObserver:self forKeyPath:kNGAudioPlayerKeypathRate options:NSKeyValueObservingOptionNew context:&rateContext];
+        [self addObserver:self forKeyPath:kNGAudioPlayerKeypathStatus options:NSKeyValueObservingOptionNew context:&statusContext];
+        [self addObserver:self forKeyPath:kNGAudioPlayerKeypathCurrentItem options:NSKeyValueObservingOptionNew context:&currentItemContext];
     }
     
     return self;
@@ -78,6 +91,28 @@
 
 - (id)init {
     return [self initWithURLs:nil];
+}
+
+- (void)dealloc {
+    [self removeObserver:self forKeyPath:kNGAudioPlayerKeypathRate];
+    [self removeObserver:self forKeyPath:kNGAudioPlayerKeypathStatus];
+    [self removeObserver:self forKeyPath:kNGAudioPlayerKeypathCurrentItem];
+}
+
+////////////////////////////////////////////////////////////////////////
+#pragma mark - NSObject KVO
+////////////////////////////////////////////////////////////////////////
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if (context == &rateContext && [keyPath isEqualToString:kNGAudioPlayerKeypathRate]) {
+        [self handleRateChange:change];
+    } else if (context == &statusContext && [keyPath isEqualToString:kNGAudioPlayerKeypathStatus]) {
+        [self handleStatusChange:change];
+    } else if (context == &currentItemContext && [keyPath isEqualToString:kNGAudioPlayerKeypathCurrentItem]) {
+        [self handleCurrentItemChange:change];
+    } else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -119,12 +154,7 @@
     if (delegate != _delegate) {
         _delegate = delegate;
         
-        _delegateFlags.willStartPlaybackOfURL = [delegate respondsToSelector:@selector(audioPlayer:willStartPlaybackOfURL:)];
         _delegateFlags.didStartPlaybackOfURL = [delegate respondsToSelector:@selector(audioPlayer:didStartPlaybackOfURL:)];
-        _delegateFlags.willPausePlaybackOfURL = [delegate respondsToSelector:@selector(audioPlayer:willPausePlaybackOfURL:)];
-        _delegateFlags.didPausePlaybackOfURL = [delegate respondsToSelector:@selector(audioPlayer:didPausePlaybackOfURL:)];
-        _delegateFlags.didStartPlaying = [delegate respondsToSelector:@selector(audioPlayerDidStartPlaying:)];
-        _delegateFlags.didPausePlaying = [delegate respondsToSelector:@selector(audioPlayerDidPausePlaying:)];
         _delegateFlags.didChangePlaybackState = [delegate respondsToSelector:@selector(audioPlayerDidChangePlaybackState:)];
     }
 }
@@ -168,6 +198,7 @@
 - (void)playURL:(NSURL *)url {
     [self removeAllURLs];
     [self enqueueURL:url];
+    [self play];
 }
 
 - (void)play {
@@ -285,6 +316,25 @@
 
 - (NSTimeInterval)durationOfItem:(AVPlayerItem *)item {
     return CMTimeGetSeconds([self CMDurationOfItem:item]);
+}
+
+- (void)handleRateChange:(NSDictionary *)change {
+    [self.delegate audioPlayerDidChangePlaybackState:self.playbackState];
+}
+
+- (void)handleStatusChange:(NSDictionary *)change {
+    AVPlayerStatus newStatus = (AVPlayerStatus)[[change valueForKey:NSKeyValueChangeNewKey] intValue];
+    
+    // TODO: tell delegate that something happened
+}
+
+- (void)handleCurrentItemChange:(NSDictionary *)change {
+    AVPlayerItem *newItem = (AVPlayerItem *)[change valueForKey:NSKeyValueChangeNewKey];
+    NSURL *url = [self URLOfItem:newItem];
+    
+    if (self.playing && _delegateFlags.didStartPlaybackOfURL) {
+        [self.delegate audioPlayer:self didStartPlaybackOfURL:url];
+    }
 }
 
 @end
