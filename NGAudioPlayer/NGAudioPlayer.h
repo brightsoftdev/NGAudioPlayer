@@ -49,6 +49,10 @@
 - (void)playURL:(NSURL *)url;
 - (void)play;
 - (void)pause;
+/**
+ Pauses the player and removes all items from the queue.
+ */
+- (void)stop;
 - (void)togglePlayback;
 
 /******************************************

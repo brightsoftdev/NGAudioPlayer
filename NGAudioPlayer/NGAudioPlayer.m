@@ -196,9 +196,11 @@ static char currentItemContext;
 ////////////////////////////////////////////////////////////////////////
 
 - (void)playURL:(NSURL *)url {
-    [self removeAllURLs];
-    [self enqueueURL:url];
-    [self play];
+    if (url != nil) {
+        [self removeAllURLs];
+        [self enqueueURL:url];
+        [self play];
+    }
 }
 
 - (void)play {
@@ -207,6 +209,11 @@ static char currentItemContext;
 
 - (void)pause {
     [self.player pause];
+}
+
+- (void)stop {
+    [self pause];
+    [self removeAllURLs];
 }
 
 - (void)togglePlayback {
