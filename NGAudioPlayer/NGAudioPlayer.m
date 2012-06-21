@@ -42,6 +42,15 @@
 #pragma mark - Lifecycle
 ////////////////////////////////////////////////////////////////////////
 
++ (void)initialize {
+    if (self == [NGAudioPlayer class]) {
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            (void)[self initBackgroundAudio];
+        });
+    }
+}
+
 - (id)initWithURLs:(NSArray *)urls {
     if ((self = [super init])) {
         if (urls.count > 0) {
